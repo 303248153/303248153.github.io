@@ -558,6 +558,7 @@ RCNN 慢的原因主要是因为识别几千个子图片的计算量非常庞大
 缩放图片使用的代码如下 (opencv 版)：
 
 ``` python
+# 缩放图片的大小
 IMAGE_SIZE = (128, 88)
 
 def calc_resize_parameters(sw, sh):
