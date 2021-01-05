@@ -809,12 +809,13 @@ def calc_box_offset(candidate_box, true_box):
 
 def adjust_box_by_offset(candidate_box, offset):
     """根据偏移值调整候选区域"""
+    # exp 需要限制值小于 log(16)，如果值过大可能会引发 OverflowError
     x1, y1, w1, h1 = candidate_box
     x_offset, y_offset, w_offset, h_offset = offset
     x2 = min(IMAGE_SIZE[0]-1,  max(0, w1 * x_offset + x1))
     y2 = min(IMAGE_SIZE[1]-1,  max(0, h1 * y_offset + y1))
-    w2 = min(IMAGE_SIZE[0]-x2, max(1, math.exp(w_offset) * w1))
-    h2 = min(IMAGE_SIZE[1]-y2, max(1, math.exp(h_offset) * h1))
+    w2 = min(IMAGE_SIZE[0]-x2, max(1, math.exp(min(w_offset, 2.78)) * w1))
+    h2 = min(IMAGE_SIZE[1]-y2, max(1, math.exp(min(h_offset, 2.78)) * h1))
     return (x2, y2, w2, h2)
 
 def merge_box(box_a, box_b):
